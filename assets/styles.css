@@ -1209,7 +1209,7 @@ img {
 
 .goals-list li {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 52px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
   color: var(--ink-soft);
@@ -1231,12 +1231,31 @@ img {
   text-align: right;
 }
 
-.goal-minute {
+.goal-timing {
   grid-column: 2;
   grid-row: 1;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.goal-minute {
   color: #7e8885;
   font-variant-numeric: tabular-nums;
   text-align: center;
+}
+
+.goal-period {
+  padding: 2px 5px;
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--paper-bright));
+  color: var(--accent-dark);
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
 }
 
 .scorers-total {
