@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /data/
 
-Sitemap: http://localhost:3000/sitemap.xml
+Sitemap: https://infobrasileirao.com.br/sitemap.xml
