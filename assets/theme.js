@@ -33,7 +33,7 @@
   function initialize() {
     syncControls();
     document.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-theme-option]");
+      const button = event.target?.closest?.("[data-theme-option]");
       if (button) selectTheme(button.dataset.themeOption);
     });
   }
