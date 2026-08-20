@@ -36,6 +36,19 @@
       const button = event.target?.closest?.("[data-theme-option]");
       if (button) selectTheme(button.dataset.themeOption);
     });
+    document.addEventListener(
+      "error",
+      (event) => {
+        const target = event.target;
+        if (
+          target instanceof HTMLImageElement &&
+          target.classList.contains("player-photo")
+        ) {
+          target.remove();
+        }
+      },
+      true
+    );
   }
 
   if (document.readyState === "loading") {
