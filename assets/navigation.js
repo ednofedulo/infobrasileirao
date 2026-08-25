@@ -1,14 +1,25 @@
 (() => {
   const menuStorageKey = "central-do-campeonato-menu-collapsed";
   const root = document.documentElement;
+  const compactMenuQuery = matchMedia("(max-width: 850px)");
 
-  try {
-    const savedMenuState = localStorage.getItem(menuStorageKey);
-    if (savedMenuState === "false") delete root.dataset.menuCollapsed;
-    else root.dataset.menuCollapsed = "true";
-  } catch {
-    // Storage can be unavailable in private or restricted browsing contexts.
+  function savedMenuState() {
+    try {
+      return localStorage.getItem(menuStorageKey);
+    } catch {
+      return null;
+    }
   }
+
+  function restoreMenuForViewport() {
+    if (compactMenuQuery.matches || savedMenuState() !== "false") {
+      root.dataset.menuCollapsed = "true";
+    } else {
+      delete root.dataset.menuCollapsed;
+    }
+  }
+
+  restoreMenuForViewport();
 
   function syncControls() {
     const menuCollapsed = root.dataset.menuCollapsed === "true";
@@ -45,6 +56,10 @@
 
   function initialize() {
     syncControls();
+    compactMenuQuery.addEventListener?.("change", () => {
+      restoreMenuForViewport();
+      syncControls();
+    });
     document.addEventListener("click", (event) => {
       if (event.target?.closest?.("[data-menu-toggle]")) toggleMenu();
     });
