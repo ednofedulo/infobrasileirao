@@ -1,18 +1,10 @@
 (() => {
   const menuStorageKey = "central-do-campeonato-menu-collapsed";
   const root = document.documentElement;
-  const compactMenuQuery = matchMedia("(max-width: 850px)");
-
-  function savedMenuState() {
-    try {
-      return localStorage.getItem(menuStorageKey);
-    } catch {
-      return null;
-    }
-  }
+  const compactMenuQuery = matchMedia("(max-width: 900px)");
 
   function restoreMenuForViewport() {
-    if (compactMenuQuery.matches || savedMenuState() !== "false") {
+    if (compactMenuQuery.matches) {
       root.dataset.menuCollapsed = "true";
     } else {
       delete root.dataset.menuCollapsed;
@@ -22,7 +14,8 @@
   restoreMenuForViewport();
 
   function syncControls() {
-    const menuCollapsed = root.dataset.menuCollapsed === "true";
+    const menuCollapsed =
+      compactMenuQuery.matches && root.dataset.menuCollapsed === "true";
     for (const button of document.querySelectorAll("[data-menu-toggle]")) {
       button.setAttribute("aria-expanded", String(!menuCollapsed));
       button.setAttribute(
@@ -62,6 +55,11 @@
     });
     document.addEventListener("click", (event) => {
       if (event.target?.closest?.("[data-menu-toggle]")) toggleMenu();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !compactMenuQuery.matches) return;
+      root.dataset.menuCollapsed = "true";
+      syncControls();
     });
     document.addEventListener(
       "error",
