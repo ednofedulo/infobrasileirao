@@ -1,5 +1,5 @@
 (() => {
-  const menuStorageKey = "central-do-campeonato-menu-collapsed";
+  const menuStorageKey = "info-brasileirao-menu-collapsed";
   const root = document.documentElement;
   const compactMenuQuery = matchMedia("(max-width: 900px)");
 
