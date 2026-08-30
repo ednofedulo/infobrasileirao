@@ -34,6 +34,18 @@
     }
   }
 
+  function focusMenuLink() {
+    const navigation = document.querySelector("[data-primary-navigation]");
+    const destination =
+      navigation?.querySelector('a[aria-current="page"]') ??
+      navigation?.querySelector("a");
+    destination?.focus();
+  }
+
+  function focusMenuButton() {
+    document.querySelector("[data-menu-toggle]")?.focus();
+  }
+
   function toggleMenu() {
     const collapsed = root.dataset.menuCollapsed !== "true";
     if (collapsed) root.dataset.menuCollapsed = "true";
@@ -45,6 +57,10 @@
       // Menu still changes for the current page when persistence is blocked.
     }
     syncControls();
+    if (compactMenuQuery.matches) {
+      if (collapsed) focusMenuButton();
+      else focusMenuLink();
+    }
   }
 
   function initialize() {
@@ -60,6 +76,7 @@
       if (event.key !== "Escape" || !compactMenuQuery.matches) return;
       root.dataset.menuCollapsed = "true";
       syncControls();
+      focusMenuButton();
     });
     document.addEventListener(
       "error",
@@ -69,7 +86,11 @@
           target instanceof HTMLImageElement &&
           target.classList.contains("player-photo")
         ) {
-          target.remove();
+          const fallback = document.createElement("span");
+          fallback.className = `${target.className} player-photo-fallback`;
+          fallback.setAttribute("aria-hidden", "true");
+          fallback.textContent = target.parentElement?.dataset.initials ?? "";
+          target.replaceWith(fallback);
         }
       },
       true

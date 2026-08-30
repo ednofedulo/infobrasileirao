@@ -118,6 +118,113 @@ function standingZone(position) {
   return "zone-neutral";
 }
 
+function createPlayerBadge(team) {
+  if (team.crest) {
+    const image = document.createElement("img");
+    image.className = "simulator-match-badge team-crest";
+    image.src = team.crest;
+    image.alt = "";
+    image.width = 48;
+    image.height = 48;
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.setAttribute("aria-hidden", "true");
+    return image;
+  }
+
+  const badge = document.createElement("span");
+  badge.className = "simulator-match-badge";
+  badge.style.setProperty("--team-color", team.background);
+  badge.style.setProperty("--team-foreground", team.foreground);
+  badge.setAttribute("aria-hidden", "true");
+  badge.textContent = team.abbreviation;
+  return badge;
+}
+
+function createScoreStepper(team, side) {
+  const stepper = document.createElement("div");
+  stepper.className = "score-stepper";
+  const label = `Gols de ${team.name}`;
+
+  for (const [direction, symbol, title] of [
+    [-1, "−", "Reduzir gols"],
+    [1, "+", "Aumentar gols"]
+  ]) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.scoreStep = String(direction);
+    button.setAttribute(
+      "aria-label",
+      `${direction < 0 ? "Reduzir" : "Aumentar"} ${label.toLowerCase()}`
+    );
+    button.title = title;
+    button.textContent = symbol;
+    stepper.append(button);
+
+    if (direction < 0) {
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "0";
+      input.max = "99";
+      input.step = "1";
+      input.inputMode = "numeric";
+      input.autocomplete = "off";
+      input.setAttribute("aria-label", label);
+      input.dataset.simulationScore = "";
+      input.dataset.side = side;
+      input.dataset.teamId = team.id;
+      stepper.append(input);
+    }
+  }
+  return stepper;
+}
+
+function createMatchTeam(team, side) {
+  const container = document.createElement("div");
+  container.className = `simulator-match-team ${side}`;
+  const name = document.createElement("strong");
+  name.title = team.name;
+  name.textContent = team.name;
+  container.append(createPlayerBadge(team), name, createScoreStepper(team, side));
+  return container;
+}
+
+function createRound(round, teams) {
+  const section = document.createElement("section");
+  section.className = "simulator-round";
+  section.dataset.simulatorRound = "";
+  section.dataset.roundNumber = String(round.number);
+
+  const heading = document.createElement("div");
+  heading.className = "simulator-round-heading";
+  const title = document.createElement("h2");
+  title.textContent = `Rodada ${round.number}`;
+  const dateRange = document.createElement("span");
+  dateRange.textContent = round.dateRange;
+  heading.append(title, dateRange);
+
+  const matches = document.createElement("div");
+  for (const match of round.matches) {
+    const article = document.createElement("article");
+    article.className = "simulator-match";
+    article.dataset.simulationMatch = "";
+    article.dataset.matchId = match.id;
+    const date = document.createElement("p");
+    date.className = "simulator-match-date";
+    date.textContent = match.dateLabel;
+    const scoreboard = document.createElement("div");
+    scoreboard.className = "simulator-scoreboard";
+    scoreboard.append(
+      createMatchTeam(teams[match.homeTeamId], "home"),
+      createMatchTeam(teams[match.awayTeamId], "away")
+    );
+    article.append(date, scoreboard);
+    matches.append(article);
+  }
+  section.append(heading, matches);
+  return section;
+}
+
 function initializeSimulator() {
   const root = document.querySelector("[data-result-simulator]");
   if (!root) return;
@@ -126,25 +233,36 @@ function initializeSimulator() {
   const rows = [...root.querySelectorAll("[data-standing-row]")];
   const baseStandings = readBaseStandings(rows);
   const rowsByTeam = new Map(rows.map((row) => [row.dataset.teamId, row]));
-  const rounds = [...root.querySelectorAll("[data-simulator-round]")];
+  const serializedData = root.querySelector("[data-simulator-data]");
+  const simulatorData = JSON.parse(serializedData?.textContent ?? '{"rounds":[]}');
+  const rounds = simulatorData.rounds;
+  const renderedRounds = new Map();
+  const initialRound = root.querySelector("[data-simulator-round]");
   const previousRoundButton = root.querySelector('[data-round-step="-1"]');
   const nextRoundButton = root.querySelector('[data-round-step="1"]');
   const activeRoundLabel = root.querySelector("[data-active-round]");
   const roundPosition = root.querySelector("[data-round-position]");
   let activeRoundIndex = Math.max(
     0,
-    rounds.findIndex((round) => !round.hidden)
+    rounds.findIndex(
+      (round) => String(round.number) === initialRound?.dataset.roundNumber
+    )
   );
+  if (initialRound) renderedRounds.set(activeRoundIndex, initialRound);
 
   function showRound(index) {
     if (!rounds.length) return;
     activeRoundIndex = Math.min(rounds.length - 1, Math.max(0, index));
 
-    rounds.forEach((round, roundIndex) => {
-      round.hidden = roundIndex !== activeRoundIndex;
-    });
-    const activeRound = rounds[activeRoundIndex];
-    activeRoundLabel.textContent = `Rodada ${activeRound.dataset.roundNumber}`;
+    for (const round of renderedRounds.values()) round.hidden = true;
+    let activeRound = renderedRounds.get(activeRoundIndex);
+    if (!activeRound) {
+      activeRound = createRound(rounds[activeRoundIndex], simulatorData.teams);
+      serializedData.before(activeRound);
+      renderedRounds.set(activeRoundIndex, activeRound);
+    }
+    activeRound.hidden = false;
+    activeRoundLabel.textContent = `Rodada ${rounds[activeRoundIndex].number}`;
     roundPosition.textContent = `${activeRoundIndex + 1} de ${rounds.length}`;
     previousRoundButton.disabled = activeRoundIndex === 0;
     nextRoundButton.disabled = activeRoundIndex === rounds.length - 1;
