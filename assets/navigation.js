@@ -63,6 +63,21 @@
     }
   }
 
+  function toggleStandingChart(button) {
+    const chartId = button.getAttribute("aria-controls");
+    const chart = chartId ? document.getElementById(chartId) : null;
+    if (!chart) return;
+
+    const expanded = button.getAttribute("aria-expanded") !== "true";
+    const teamName = button.dataset.teamName ?? "o clube";
+    button.setAttribute("aria-expanded", String(expanded));
+    button.setAttribute(
+      "aria-label",
+      `${expanded ? "Recolher" : "Exibir"} evolução do ${teamName} rodada por rodada`
+    );
+    chart.hidden = !expanded;
+  }
+
   function initialize() {
     syncControls();
     compactMenuQuery.addEventListener?.("change", () => {
@@ -71,6 +86,8 @@
     });
     document.addEventListener("click", (event) => {
       if (event.target?.closest?.("[data-menu-toggle]")) toggleMenu();
+      const standingToggle = event.target?.closest?.("[data-standing-toggle]");
+      if (standingToggle) toggleStandingChart(standingToggle);
     });
     document.addEventListener("keydown", (event) => {
       if (event.key !== "Escape" || !compactMenuQuery.matches) return;

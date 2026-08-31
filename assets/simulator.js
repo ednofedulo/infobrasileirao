@@ -67,6 +67,18 @@ export function calculateSimulatedStandings(baseStandings, matches) {
     .map((entry, index) => ({ ...entry, position: index + 1 }));
 }
 
+export function simulationStatusMessage(matchCount, hasEnteredScore) {
+  if (matchCount > 0) {
+    return `Classificação atualizada com ${matchCount} ${
+      matchCount === 1 ? "resultado simulado" : "resultados simulados"
+    }.`;
+  }
+  if (hasEnteredScore) {
+    return "Preencha os dois placares da partida para atualizar a classificação.";
+  }
+  return "Classificação restaurada sem resultados simulados.";
+}
+
 function readBaseStandings(rows) {
   return rows.map((row) => ({
     team: {
@@ -242,6 +254,7 @@ function initializeSimulator() {
   const nextRoundButton = root.querySelector('[data-round-step="1"]');
   const activeRoundLabel = root.querySelector("[data-active-round]");
   const roundPosition = root.querySelector("[data-round-position]");
+  const simulatorStatus = root.querySelector("[data-simulator-status]");
   let activeRoundIndex = Math.max(
     0,
     rounds.findIndex(
@@ -268,7 +281,7 @@ function initializeSimulator() {
     nextRoundButton.disabled = activeRoundIndex === rounds.length - 1;
   }
 
-  function updateStandings() {
+  function updateStandings({ announce = false } = {}) {
     const matches = readSimulatedMatches(root);
     const standings = calculateSimulatedStandings(baseStandings, matches);
 
@@ -304,6 +317,16 @@ function initializeSimulator() {
       }
       tableBody.append(row);
     }
+
+    if (announce && simulatorStatus) {
+      const hasEnteredScore = [
+        ...root.querySelectorAll("[data-simulation-score]")
+      ].some((input) => input.value.length);
+      simulatorStatus.textContent = simulationStatusMessage(
+        matches.length,
+        hasEnteredScore
+      );
+    }
   }
 
   root.addEventListener("click", (event) => {
@@ -330,7 +353,7 @@ function initializeSimulator() {
       for (const input of root.querySelectorAll("[data-simulation-score]")) {
         input.value = "";
       }
-      updateStandings();
+      updateStandings({ announce: true });
     }
   });
 
@@ -342,7 +365,7 @@ function initializeSimulator() {
         ? String(Math.min(99, Math.max(0, score)))
         : "";
     }
-    updateStandings();
+    updateStandings({ announce: true });
   });
 
   showRound(activeRoundIndex);
