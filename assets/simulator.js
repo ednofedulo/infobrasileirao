@@ -1,4 +1,10 @@
-export function calculateSimulatedStandings(baseStandings, matches) {
+import { rankStandingsByCbfCriteria } from "./standing-order.js?v=9e6886317c75";
+
+export function calculateSimulatedStandings(
+  baseStandings,
+  matches,
+  playedMatches = []
+) {
   const table = new Map(
     baseStandings.map((entry, index) => [
       String(entry.team.id),
@@ -50,21 +56,12 @@ export function calculateSimulatedStandings(baseStandings, matches) {
     }
   }
 
-  return [...table.values()]
-    .map((entry) => ({
-      ...entry,
-      goalDifference: entry.goalsFor - entry.goalsAgainst
-    }))
-    .sort(
-      (left, right) =>
-        right.points - left.points ||
-        right.wins - left.wins ||
-        right.goalDifference - left.goalDifference ||
-        right.goalsFor - left.goalsFor ||
-        left.basePosition - right.basePosition ||
-        left.team.name.localeCompare(right.team.name, "pt-BR")
-    )
-    .map((entry, index) => ({ ...entry, position: index + 1 }));
+  const standings = [...table.values()].map((entry) => ({
+    ...entry,
+    goalDifference: entry.goalsFor - entry.goalsAgainst
+  }));
+
+  return rankStandingsByCbfCriteria(standings, [...playedMatches, ...matches]);
 }
 
 export function simulationStatusMessage(matchCount, hasEnteredScore) {
@@ -93,7 +90,9 @@ function readBaseStandings(rows) {
     losses: Number(row.dataset.losses),
     goalsFor: Number(row.dataset.goalsFor),
     goalsAgainst: Number(row.dataset.goalsAgainst),
-    goalDifference: Number(row.dataset.goalDifference)
+    goalDifference: Number(row.dataset.goalDifference),
+    yellowCards: Number(row.dataset.yellowCards),
+    redCards: Number(row.dataset.redCards)
   }));
 }
 
@@ -283,7 +282,11 @@ function initializeSimulator() {
 
   function updateStandings({ announce = false } = {}) {
     const matches = readSimulatedMatches(root);
-    const standings = calculateSimulatedStandings(baseStandings, matches);
+    const standings = calculateSimulatedStandings(
+      baseStandings,
+      matches,
+      simulatorData.playedMatches
+    );
 
     for (const entry of standings) {
       const row = rowsByTeam.get(String(entry.team.id));
