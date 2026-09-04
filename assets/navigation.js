@@ -46,6 +46,50 @@
     document.querySelector("[data-menu-toggle]")?.focus();
   }
 
+  function revealActiveViewTab() {
+    for (const navigation of document.querySelectorAll(".view-tabs, .metric-tabs")) {
+      const active = navigation.querySelector('[aria-current="page"]');
+      if (!active) continue;
+      navigation.scrollTo({
+        left: Math.max(
+          0,
+          active.offsetLeft - (navigation.clientWidth - active.offsetWidth) / 2
+        )
+      });
+    }
+  }
+
+  function setUpScrollableTabs() {
+    for (const scroller of document.querySelectorAll("[data-tabs-scroller]")) {
+      const navigation = scroller.querySelector(".view-tabs, .metric-tabs");
+      const previous = scroller.querySelector('[data-tabs-scroll="previous"]');
+      const next = scroller.querySelector('[data-tabs-scroll="next"]');
+      if (!navigation || !previous || !next) continue;
+
+      function syncIndicators() {
+        const maximum = Math.max(0, navigation.scrollWidth - navigation.clientWidth);
+        const overflowing = maximum > 2;
+        previous.hidden = !overflowing || navigation.scrollLeft <= 2;
+        next.hidden = !overflowing || navigation.scrollLeft >= maximum - 2;
+      }
+
+      function move(direction) {
+        navigation.scrollBy({
+          left: direction * Math.max(140, navigation.clientWidth * 0.7),
+          behavior: "smooth"
+        });
+      }
+
+      previous.addEventListener("click", () => move(-1));
+      next.addEventListener("click", () => move(1));
+      navigation.addEventListener("scroll", syncIndicators, { passive: true });
+      if (typeof ResizeObserver !== "undefined") {
+        new ResizeObserver(syncIndicators).observe(navigation);
+      }
+      syncIndicators();
+    }
+  }
+
   function toggleMenu() {
     const collapsed = root.dataset.menuCollapsed !== "true";
     if (collapsed) root.dataset.menuCollapsed = "true";
@@ -200,6 +244,8 @@
 
   function initialize() {
     syncControls();
+    revealActiveViewTab();
+    setUpScrollableTabs();
     compactMenuQuery.addEventListener?.("change", () => {
       restoreMenuForViewport();
       syncControls();

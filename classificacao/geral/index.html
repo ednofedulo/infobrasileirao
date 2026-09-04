@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <base href="../../" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" fetchpriority="high" href="assets/styles.css?v=4c27fee39bd0" />
+    <link rel="stylesheet" fetchpriority="high" href="assets/styles.css?v=619fb137928b" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="description" content="Confira a classificação do Brasileirão Série A 2026 após a rodada 25, com pontos, jogos, vitórias, saldo de gols e forma dos 20 clubes." />
@@ -27,8 +27,8 @@
     <link rel="canonical" href="https://infobrasileirao.com.br/" />
     <link rel="icon" href="assets/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180" />
-    <script defer fetchpriority="low" src="assets/navigation.js?v=bbd8ac9cbecc"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://infobrasileirao.com.br/#website","url":"https://infobrasileirao.com.br/","name":"Info Brasileirão","inLanguage":"pt-BR"},{"@type":"CollectionPage","@id":"https://infobrasileirao.com.br/#webpage","url":"https://infobrasileirao.com.br/","name":"Tabela do Brasileirão Série A 2026 | Info Brasileirão","description":"Confira a classificação do Brasileirão Série A 2026 após a rodada 25, com pontos, jogos, vitórias, saldo de gols e forma dos 20 clubes.","inLanguage":"pt-BR","dateModified":"2026-09-04T07:55:23.762Z","isPartOf":{"@id":"https://infobrasileirao.com.br/#website"}}]}</script>
+    <script defer fetchpriority="low" src="assets/navigation.js?v=b3d4ba653aed"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://infobrasileirao.com.br/#website","url":"https://infobrasileirao.com.br/","name":"Info Brasileirão","inLanguage":"pt-BR"},{"@type":"CollectionPage","@id":"https://infobrasileirao.com.br/#webpage","url":"https://infobrasileirao.com.br/","name":"Tabela do Brasileirão Série A 2026 | Info Brasileirão","description":"Confira a classificação do Brasileirão Série A 2026 após a rodada 25, com pontos, jogos, vitórias, saldo de gols e forma dos 20 clubes.","inLanguage":"pt-BR","dateModified":"2026-09-04T12:35:13.690Z","isPartOf":{"@id":"https://infobrasileirao.com.br/#website"}}]}</script>
   </head>
   <body class="app-body">
     <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo</a>
@@ -44,18 +44,24 @@
         <main class="shell main-content static-main" id="conteudo-principal" tabindex="-1">
           <section class="section-block" id="classificacao">
     <div class="section-heading"><div><h1>Classificação</h1></div></div>
-    <nav class="view-tabs local-navigation" aria-label="Tipo de classificação">
-      <a class="view-tab active" href="./" aria-current="page">Geral</a><a class="view-tab " href="classificacao/mandante/">Mandante</a><a class="view-tab " href="classificacao/visitante/">Visitante</a><a class="view-tab " href="classificacao/primeiro-turno/">1º turno</a><a class="view-tab " href="classificacao/segundo-turno/">2º turno</a><a class="view-tab " href="classificacao/ultimas-10/">Últimos 10 jogos</a>
-    </nav>
+    <div class="tabs-scroller local-navigation" data-tabs-scroller>
+      <button class="tabs-scroll-button tabs-scroll-previous" type="button" aria-label="Mostrar abas anteriores" aria-controls="classification-tabs" data-tabs-scroll="previous" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12.5 4.5-5 5.5 5 5.5"/></svg></button>
+      <nav class="view-tabs" id="classification-tabs" aria-label="Tipo de classificação">
+        <a class="view-tab active" href="./" aria-current="page">Geral</a><a class="view-tab " href="classificacao/mandante/">Mandante</a><a class="view-tab " href="classificacao/visitante/">Visitante</a><a class="view-tab " href="classificacao/primeiro-turno/">1º turno</a><a class="view-tab " href="classificacao/segundo-turno/">2º turno</a><a class="view-tab " href="classificacao/ultimas-10/">Últimos jogos</a>
+      </nav>
+      <button class="tabs-scroll-button tabs-scroll-next" type="button" aria-label="Mostrar mais abas" aria-controls="classification-tabs" data-tabs-scroll="next" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7.5 4.5 5 5.5-5 5.5"/></svg></button>
+    </div>
+    
     <div class="standings-wrap">
-      <table class="standings-static standings-overall" role="table">
+      <div class="standings-scroll">
+        <table class="standings-static standings-overall" role="table">
         <caption class="visually-hidden">Classificação geral</caption>
         <thead><tr class="standings-static-head" role="row">
           <th scope="col" role="columnheader">#</th><th scope="col" role="columnheader">Clube</th><th scope="col" role="columnheader"><abbr title="Pontos">PTS</abbr></th><th scope="col" role="columnheader"><abbr title="Jogos">J</abbr></th><th scope="col" role="columnheader"><abbr title="Vitórias">V</abbr></th><th scope="col" role="columnheader"><abbr title="Empates">E</abbr></th><th scope="col" role="columnheader"><abbr title="Derrotas">D</abbr></th><th scope="col" role="columnheader"><abbr title="Gols pró">GP</abbr></th><th scope="col" role="columnheader"><abbr title="Gols contra">GC</abbr></th><th scope="col" role="columnheader"><abbr title="Saldo de gols">SG</abbr></th><th scope="col" role="columnheader"><abbr title="Aproveitamento">%</abbr></th><th scope="col" role="columnheader">Últimos</th>
         </tr></thead>
         <tbody><tr class="standing-entry standing-static-row zone-libertadores" role="row"><td class="position-cell" role="cell">1</td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Palmeiras" aria-expanded="false" aria-controls="standing-chart-20002" aria-label="Exibir evolução do Palmeiras na classificação"><img class="team-badge team-crest" src="media/crests/20002-0678c360a483.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Palmeiras</strong><small class="team-state">SP</small><small class="team-micro">25J · 15V 7E 3D · 45:21 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Palmeiras</span><span class="team-name-abbreviation" aria-hidden="true">PAL</span></strong><small class="team-state">SP</small><small class="team-micro">25J · 15V 7E 3D · 45:21 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>52</strong></td>
     <td role="cell">25</td><td role="cell">15</td><td role="cell">7</td><td role="cell">3</td><td role="cell">45</td><td role="cell">21</td>
     <td role="cell">+24</td>
@@ -87,7 +93,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-libertadores" role="row"><td class="position-cell" role="cell">2</td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Flamengo" aria-expanded="false" aria-controls="standing-chart-20016" aria-label="Exibir evolução do Flamengo na classificação"><img class="team-badge team-crest" src="media/crests/20016-21cf20d9e84c.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Flamengo</strong><small class="team-state">RJ</small><small class="team-micro">25J · 15V 6E 4D · 50:21 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Flamengo</span><span class="team-name-abbreviation" aria-hidden="true">FLA</span></strong><small class="team-state">RJ</small><small class="team-micro">25J · 15V 6E 4D · 50:21 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>51</strong></td>
     <td role="cell">25</td><td role="cell">15</td><td role="cell">6</td><td role="cell">4</td><td role="cell">50</td><td role="cell">21</td>
     <td role="cell">+29</td>
@@ -119,7 +125,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-libertadores" role="row"><td class="position-cell" role="cell">3</td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Athletico Paranaense" aria-expanded="false" aria-controls="standing-chart-20052" aria-label="Exibir evolução do Athletico Paranaense na classificação"><img class="team-badge team-crest" src="media/crests/20052-812b53f41aca.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Athletico Paranaense</strong><small class="team-state">PR</small><small class="team-micro">25J · 13V 6E 6D · 37:25 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Athletico Paranaense</span><span class="team-name-abbreviation" aria-hidden="true">CAP</span></strong><small class="team-state">PR</small><small class="team-micro">25J · 13V 6E 6D · 37:25 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>45</strong></td>
     <td role="cell">25</td><td role="cell">13</td><td role="cell">6</td><td role="cell">6</td><td role="cell">37</td><td role="cell">25</td>
     <td role="cell">+12</td>
@@ -151,7 +157,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-libertadores" role="row"><td class="position-cell" role="cell">4</td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Fluminense" aria-expanded="false" aria-controls="standing-chart-20014" aria-label="Exibir evolução do Fluminense na classificação"><img class="team-badge team-crest" src="media/crests/20014-187c27de813b.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Fluminense</strong><small class="team-state">RJ</small><small class="team-micro">25J · 11V 9E 5D · 39:32 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Fluminense</span><span class="team-name-abbreviation" aria-hidden="true">FLU</span></strong><small class="team-state">RJ</small><small class="team-micro">25J · 11V 9E 5D · 39:32 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>42</strong></td>
     <td role="cell">25</td><td role="cell">11</td><td role="cell">9</td><td role="cell">5</td><td role="cell">39</td><td role="cell">32</td>
     <td role="cell">+7</td>
@@ -183,7 +189,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-libertadores" role="row"><td class="position-cell" role="cell">5<span class="movement-indicator up" aria-label="Subiu 1 posição">↑1</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Bahia" aria-expanded="false" aria-controls="standing-chart-61377" aria-label="Exibir evolução do Bahia na classificação"><img class="team-badge team-crest" src="media/crests/61377-f5406e7e12b4.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Bahia</strong><small class="team-state">BA</small><small class="team-micro">25J · 10V 10E 5D · 37:30 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Bahia</span><span class="team-name-abbreviation" aria-hidden="true">BAH</span></strong><small class="team-state">BA</small><small class="team-micro">25J · 10V 10E 5D · 37:30 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>40</strong></td>
     <td role="cell">25</td><td role="cell">10</td><td role="cell">10</td><td role="cell">5</td><td role="cell">37</td><td role="cell">30</td>
     <td role="cell">+7</td>
@@ -215,7 +221,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-sulamericana" role="row"><td class="position-cell" role="cell">6<span class="movement-indicator down" aria-label="Caiu 1 posição">↓1</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Cruzeiro" aria-expanded="false" aria-controls="standing-chart-59849" aria-label="Exibir evolução do Cruzeiro na classificação"><img class="team-badge team-crest" src="media/crests/59849-c3eb93a14c04.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Cruzeiro</strong><small class="team-state">MG</small><small class="team-micro">25J · 11V 6E 8D · 35:36 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Cruzeiro</span><span class="team-name-abbreviation" aria-hidden="true">CRU</span></strong><small class="team-state">MG</small><small class="team-micro">25J · 11V 6E 8D · 35:36 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>39</strong></td>
     <td role="cell">25</td><td role="cell">11</td><td role="cell">6</td><td role="cell">8</td><td role="cell">35</td><td role="cell">36</td>
     <td role="cell">-1</td>
@@ -247,7 +253,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-sulamericana" role="row"><td class="position-cell" role="cell">7<span class="movement-indicator up" aria-label="Subiu 1 posição">↑1</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Coritiba SAF" aria-expanded="false" aria-controls="standing-chart-61590" aria-label="Exibir evolução do Coritiba SAF na classificação"><img class="team-badge team-crest" src="media/crests/61590-94126c6475dc.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Coritiba SAF</strong><small class="team-state">PR</small><small class="team-micro">25J · 10V 7E 8D · 33:33 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Coritiba SAF</span><span class="team-name-abbreviation" aria-hidden="true">CFC</span></strong><small class="team-state">PR</small><small class="team-micro">25J · 10V 7E 8D · 33:33 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>37</strong></td>
     <td role="cell">25</td><td role="cell">10</td><td role="cell">7</td><td role="cell">8</td><td role="cell">33</td><td role="cell">33</td>
     <td role="cell">0</td>
@@ -279,7 +285,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-sulamericana" role="row"><td class="position-cell" role="cell">8<span class="movement-indicator up" aria-label="Subiu 1 posição">↑1</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Atlético Mineiro" aria-expanded="false" aria-controls="standing-chart-62194" aria-label="Exibir evolução do Atlético Mineiro na classificação"><img class="team-badge team-crest" src="media/crests/62194-971a11d27866.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Atlético Mineiro</strong><small class="team-state">MG</small><small class="team-micro">24J · 10V 6E 8D · 32:28 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Atlético Mineiro</span><span class="team-name-abbreviation" aria-hidden="true">CAM</span></strong><small class="team-state">MG</small><small class="team-micro">24J · 10V 6E 8D · 32:28 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>36</strong></td>
     <td role="cell">24</td><td role="cell">10</td><td role="cell">6</td><td role="cell">8</td><td role="cell">32</td><td role="cell">28</td>
     <td role="cell">+4</td>
@@ -311,7 +317,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-sulamericana" role="row"><td class="position-cell" role="cell">9<span class="movement-indicator down" aria-label="Caiu 2 posições">↓2</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Red Bull Bragantino" aria-expanded="false" aria-controls="standing-chart-20007" aria-label="Exibir evolução do Red Bull Bragantino na classificação"><img class="team-badge team-crest" src="media/crests/20007-c7efdd688f09.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Red Bull Bragantino</strong><small class="team-state">SP</small><small class="team-micro">24J · 10V 5E 9D · 29:25 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Red Bull Bragantino</span><span class="team-name-abbreviation" aria-hidden="true">RBB</span></strong><small class="team-state">SP</small><small class="team-micro">24J · 10V 5E 9D · 29:25 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>35</strong></td>
     <td role="cell">24</td><td role="cell">10</td><td role="cell">5</td><td role="cell">9</td><td role="cell">29</td><td role="cell">25</td>
     <td role="cell">+4</td>
@@ -343,7 +349,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-sulamericana" role="row"><td class="position-cell" role="cell">10</td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Corinthians" aria-expanded="false" aria-controls="standing-chart-20001" aria-label="Exibir evolução do Corinthians na classificação"><img class="team-badge team-crest" src="media/crests/20001-6eb9d4f2fc1a.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Corinthians</strong><small class="team-state">SP</small><small class="team-micro">25J · 8V 8E 9D · 26:25 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Corinthians</span><span class="team-name-abbreviation" aria-hidden="true">COR</span></strong><small class="team-state">SP</small><small class="team-micro">25J · 8V 8E 9D · 26:25 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>32</strong></td>
     <td role="cell">25</td><td role="cell">8</td><td role="cell">8</td><td role="cell">9</td><td role="cell">26</td><td role="cell">25</td>
     <td role="cell">+1</td>
@@ -375,7 +381,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-sulamericana" role="row"><td class="position-cell" role="cell">11<span class="movement-indicator up" aria-label="Subiu 2 posições">↑2</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="São Paulo" aria-expanded="false" aria-controls="standing-chart-20005" aria-label="Exibir evolução do São Paulo na classificação"><img class="team-badge team-crest" src="media/crests/20005-c01ce2f99e26.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>São Paulo</strong><small class="team-state">SP</small><small class="team-micro">24J · 8V 6E 10D · 29:28 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">São Paulo</span><span class="team-name-abbreviation" aria-hidden="true">SAO</span></strong><small class="team-state">SP</small><small class="team-micro">24J · 8V 6E 10D · 29:28 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>30</strong></td>
     <td role="cell">24</td><td role="cell">8</td><td role="cell">6</td><td role="cell">10</td><td role="cell">29</td><td role="cell">28</td>
     <td role="cell">+1</td>
@@ -407,7 +413,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-neutral" role="row"><td class="position-cell" role="cell">12<span class="movement-indicator down" aria-label="Caiu 1 posição">↓1</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Botafogo" aria-expanded="false" aria-controls="standing-chart-60175" aria-label="Exibir evolução do Botafogo na classificação"><img class="team-badge team-crest" src="media/crests/60175-05d7ceec97d5.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Botafogo</strong><small class="team-state">RJ</small><small class="team-micro">24J · 8V 6E 10D · 37:40 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Botafogo</span><span class="team-name-abbreviation" aria-hidden="true">BOT</span></strong><small class="team-state">RJ</small><small class="team-micro">24J · 8V 6E 10D · 37:40 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>30</strong></td>
     <td role="cell">24</td><td role="cell">8</td><td role="cell">6</td><td role="cell">10</td><td role="cell">37</td><td role="cell">40</td>
     <td role="cell">-3</td>
@@ -439,7 +445,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-neutral" role="row"><td class="position-cell" role="cell">13<span class="movement-indicator down" aria-label="Caiu 1 posição">↓1</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Vitória" aria-expanded="false" aria-controls="standing-chart-20018" aria-label="Exibir evolução do Vitória na classificação"><img class="team-badge team-crest" src="media/crests/20018-aef339f81e6a.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Vitória</strong><small class="team-state">BA</small><small class="team-micro">25J · 8V 5E 12D · 24:37 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Vitória</span><span class="team-name-abbreviation" aria-hidden="true">VIT</span></strong><small class="team-state">BA</small><small class="team-micro">25J · 8V 5E 12D · 24:37 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>29</strong></td>
     <td role="cell">25</td><td role="cell">8</td><td role="cell">5</td><td role="cell">12</td><td role="cell">24</td><td role="cell">37</td>
     <td role="cell">-13</td>
@@ -471,7 +477,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-neutral" role="row"><td class="position-cell" role="cell">14</td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Santos FC" aria-expanded="false" aria-controls="standing-chart-20008" aria-label="Exibir evolução do Santos FC na classificação"><img class="team-badge team-crest" src="media/crests/20008-3930d8470b93.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Santos FC</strong><small class="team-state">SP</small><small class="team-micro">24J · 7V 8E 9D · 34:36 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Santos FC</span><span class="team-name-abbreviation" aria-hidden="true">SAN</span></strong><small class="team-state">SP</small><small class="team-micro">24J · 7V 8E 9D · 34:36 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>29</strong></td>
     <td role="cell">24</td><td role="cell">7</td><td role="cell">8</td><td role="cell">9</td><td role="cell">34</td><td role="cell">36</td>
     <td role="cell">-2</td>
@@ -503,7 +509,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-neutral" role="row"><td class="position-cell" role="cell">15</td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Grêmio" aria-expanded="false" aria-controls="standing-chart-20013" aria-label="Exibir evolução do Grêmio na classificação"><img class="team-badge team-crest" src="media/crests/20013-516523938f42.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Grêmio</strong><small class="team-state">RS</small><small class="team-micro">24J · 7V 7E 10D · 27:32 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Grêmio</span><span class="team-name-abbreviation" aria-hidden="true">GRE</span></strong><small class="team-state">RS</small><small class="team-micro">24J · 7V 7E 10D · 27:32 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>28</strong></td>
     <td role="cell">24</td><td role="cell">7</td><td role="cell">7</td><td role="cell">10</td><td role="cell">27</td><td role="cell">32</td>
     <td role="cell">-5</td>
@@ -535,7 +541,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-neutral" role="row"><td class="position-cell" role="cell">16<span class="movement-indicator up" aria-label="Subiu 1 posição">↑1</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Mirassol" aria-expanded="false" aria-controls="standing-chart-20385" aria-label="Exibir evolução do Mirassol na classificação"><img class="team-badge team-crest" src="media/crests/20385-5134f831feaf.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Mirassol</strong><small class="team-state">SP</small><small class="team-micro">25J · 6V 7E 12D · 27:39 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Mirassol</span><span class="team-name-abbreviation" aria-hidden="true">MIR</span></strong><small class="team-state">SP</small><small class="team-micro">25J · 6V 7E 12D · 27:39 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>25</strong></td>
     <td role="cell">25</td><td role="cell">6</td><td role="cell">7</td><td role="cell">12</td><td role="cell">27</td><td role="cell">39</td>
     <td role="cell">-12</td>
@@ -567,7 +573,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-relegation" role="row"><td class="position-cell" role="cell">17<span class="movement-indicator up" aria-label="Subiu 2 posições">↑2</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Vasco da Gama Saf" aria-expanded="false" aria-controls="standing-chart-60646" aria-label="Exibir evolução do Vasco da Gama Saf na classificação"><img class="team-badge team-crest" src="media/crests/60646-7368e0975137.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Vasco da Gama Saf</strong><small class="team-state">RJ</small><small class="team-micro">24J · 6V 7E 11D · 27:39 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Vasco da Gama Saf</span><span class="team-name-abbreviation" aria-hidden="true">VAS</span></strong><small class="team-state">RJ</small><small class="team-micro">24J · 6V 7E 11D · 27:39 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>25</strong></td>
     <td role="cell">24</td><td role="cell">6</td><td role="cell">7</td><td role="cell">11</td><td role="cell">27</td><td role="cell">39</td>
     <td role="cell">-12</td>
@@ -599,7 +605,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-relegation" role="row"><td class="position-cell" role="cell">18<span class="movement-indicator down" aria-label="Caiu 2 posições">↓2</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Internacional" aria-expanded="false" aria-controls="standing-chart-20011" aria-label="Exibir evolução do Internacional na classificação"><img class="team-badge team-crest" src="media/crests/20011-ecb008351dff.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Internacional</strong><small class="team-state">RS</small><small class="team-micro">25J · 5V 10E 10D · 26:31 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Internacional</span><span class="team-name-abbreviation" aria-hidden="true">INT</span></strong><small class="team-state">RS</small><small class="team-micro">25J · 5V 10E 10D · 26:31 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>25</strong></td>
     <td role="cell">25</td><td role="cell">5</td><td role="cell">10</td><td role="cell">10</td><td role="cell">26</td><td role="cell">31</td>
     <td role="cell">-5</td>
@@ -631,7 +637,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-relegation" role="row"><td class="position-cell" role="cell">19<span class="movement-indicator down" aria-label="Caiu 1 posição">↓1</span></td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Remo" aria-expanded="false" aria-controls="standing-chart-20022" aria-label="Exibir evolução do Remo na classificação"><img class="team-badge team-crest" src="media/crests/20022-554f6d7779f3.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Remo</strong><small class="team-state">PA</small><small class="team-micro">25J · 5V 8E 12D · 30:42 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Remo</span><span class="team-name-abbreviation" aria-hidden="true">REM</span></strong><small class="team-state">PA</small><small class="team-micro">25J · 5V 8E 12D · 30:42 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>23</strong></td>
     <td role="cell">25</td><td role="cell">5</td><td role="cell">8</td><td role="cell">12</td><td role="cell">30</td><td role="cell">42</td>
     <td role="cell">-12</td>
@@ -663,7 +669,7 @@
     </div>
   </div></div></td></tr><tr class="standing-entry standing-static-row zone-relegation" role="row"><td class="position-cell" role="cell">20</td>
     <td class="team-cell" role="cell"><button class="standing-chart-toggle" type="button" data-standing-toggle data-team-name="Chapecoense" aria-expanded="false" aria-controls="standing-chart-20086" aria-label="Exibir evolução do Chapecoense na classificação"><img class="team-badge team-crest" src="media/crests/20086-90e6ff2fc79b.jpg" alt="" width="48" height="48" loading="lazy" decoding="async" aria-hidden="true" />
-      <span class="team-name"><strong>Chapecoense</strong><small class="team-state">SC</small><small class="team-micro">24J · 2V 8E 14D · 25:49 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
+      <span class="team-name"><strong><span class="team-name-full">Chapecoense</span><span class="team-name-abbreviation" aria-hidden="true">CHA</span></strong><small class="team-state">SC</small><small class="team-micro">24J · 2V 8E 14D · 25:49 · 0%</small></span><span class="standing-toggle-icon" aria-hidden="true">⌄</span></button></td>
     <td class="points-cell" role="cell"><strong>14</strong></td>
     <td role="cell">24</td><td role="cell">2</td><td role="cell">8</td><td role="cell">14</td><td role="cell">25</td><td role="cell">49</td>
     <td role="cell">-24</td>
@@ -694,7 +700,8 @@
       </svg>
     </div>
   </div></div></td></tr></tbody>
-      </table>
+        </table>
+      </div>
     </div>
     <div class="competition-key" aria-label="Faixas da classificação"><span class="libertadores">Libertadores</span><span class="sulamericana">Sul-Americana</span><span class="relegation">Z4</span></div>
   </section>
