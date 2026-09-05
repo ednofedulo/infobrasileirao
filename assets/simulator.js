@@ -64,7 +64,33 @@ export function calculateSimulatedStandings(
   return rankStandingsByCbfCriteria(standings, [...playedMatches, ...matches]);
 }
 
-export function simulationStatusMessage(matchCount, hasEnteredScore) {
+export function isValidSimulationScore(value) {
+  const score = Number(value);
+  return (
+    String(value).trim().length > 0 &&
+    Number.isInteger(score) &&
+    score >= 0 &&
+    score <= 99
+  );
+}
+
+export function simulationStatusMessage(
+  matchCount,
+  incompleteCount,
+  hasEnteredScore,
+  invalidCount = 0
+) {
+  if (invalidCount > 0)
+    return "Corrija os placares inválidos. Use números inteiros de 0 a 99.";
+  if (incompleteCount > 0) {
+    const applied =
+      matchCount > 0
+        ? `${matchCount} ${matchCount === 1 ? "resultado" : "resultados"} aplicado${
+            matchCount === 1 ? "" : "s"
+          }. `
+        : "";
+    return `${applied}Preencha os dois placares da partida em aberto para atualizar a classificação.`;
+  }
   if (matchCount > 0) {
     return `Classificação atualizada com ${matchCount} ${
       matchCount === 1 ? "resultado simulado" : "resultados simulados"
@@ -100,7 +126,13 @@ function readSimulatedMatches(root) {
   return [...root.querySelectorAll("[data-simulation-match]")].flatMap((match) => {
     const homeInput = match.querySelector('[data-side="home"]');
     const awayInput = match.querySelector('[data-side="away"]');
-    if (!homeInput?.value.length || !awayInput?.value.length) return [];
+    if (
+      !homeInput ||
+      !awayInput ||
+      !isValidSimulationScore(homeInput.value) ||
+      !isValidSimulationScore(awayInput.value)
+    )
+      return [];
 
     const homeScore = Number(homeInput.value);
     const awayScore = Number(awayInput.value);
@@ -254,6 +286,7 @@ function initializeSimulator() {
   const activeRoundLabel = root.querySelector("[data-active-round]");
   const roundPosition = root.querySelector("[data-round-position]");
   const simulatorStatus = root.querySelector("[data-simulator-status]");
+  const simulationJump = root.querySelector("[data-simulation-jump]");
   let activeRoundIndex = Math.max(
     0,
     rounds.findIndex(
@@ -280,8 +313,43 @@ function initializeSimulator() {
     nextRoundButton.disabled = activeRoundIndex === rounds.length - 1;
   }
 
+  function syncMatchStates() {
+    const incomplete = [];
+    for (const [index, match] of [
+      ...root.querySelectorAll("[data-simulation-match]")
+    ].entries()) {
+      const home = match.querySelector('[data-side="home"]');
+      const away = match.querySelector('[data-side="away"]');
+      const hint = match.querySelector("[data-match-hint]");
+      const hasHome = Boolean(home?.value.length);
+      const hasAway = Boolean(away?.value.length);
+      let invalid = false;
+      for (const input of [home, away]) {
+        const invalidInput = Boolean(
+          input.validity?.badInput ||
+          (input.value.length && !isValidSimulationScore(input.value))
+        );
+        input.setAttribute("aria-invalid", String(invalidInput));
+        if (hint) input.setAttribute("aria-describedby", `simulation-hint-${index}`);
+        invalid ||= invalidInput;
+      }
+      const partial = hasHome !== hasAway || invalid;
+      match.classList.toggle("simulator-match-incomplete", partial);
+      if (hint) {
+        hint.id = `simulation-hint-${index}`;
+        hint.hidden = !partial;
+        hint.textContent = invalid
+          ? "Use placares inteiros de 0 a 99."
+          : "Preencha os dois placares.";
+      }
+      if (partial) incomplete.push(match);
+    }
+    return incomplete;
+  }
+
   function updateStandings({ announce = false } = {}) {
     const matches = readSimulatedMatches(root);
+    const incompleteMatches = syncMatchStates();
     const standings = calculateSimulatedStandings(
       baseStandings,
       matches,
@@ -301,6 +369,27 @@ function initializeSimulator() {
         row.classList.remove(zone);
       }
       row.classList.add(standingZone(entry.position));
+      const base = baseStandings.find(
+        (standing) => String(standing.team.id) === String(entry.team.id)
+      );
+      const changed =
+        base && (entry.played !== base.played || entry.position !== base.position);
+      row.classList.toggle("simulation-changed", Boolean(changed));
+      const club = row.querySelector(".simulator-club");
+      let changeLabel = club?.querySelector(".simulation-change-label");
+      if (changed && club) {
+        if (!changeLabel) {
+          changeLabel = document.createElement("small");
+          changeLabel.className = "simulation-change-label";
+          club.append(changeLabel);
+        }
+        const movement = base.position - entry.position;
+        changeLabel.textContent = movement
+          ? `${movement > 0 ? "↑" : "↓"}${Math.abs(movement)} ${Math.abs(movement) === 1 ? "posição" : "posições"}`
+          : "Simulado";
+      } else {
+        changeLabel?.remove();
+      }
 
       const values = {
         position: entry.position,
@@ -327,9 +416,14 @@ function initializeSimulator() {
       ].some((input) => input.value.length);
       simulatorStatus.textContent = simulationStatusMessage(
         matches.length,
-        hasEnteredScore
+        incompleteMatches.length,
+        hasEnteredScore,
+        root.querySelectorAll('[data-simulation-score][aria-invalid="true"]').length
       );
     }
+    if (simulationJump)
+      simulationJump.hidden = matches.length === 0 && incompleteMatches.length === 0;
+    root.dispatchEvent(new Event("simulationupdated"));
   }
 
   root.addEventListener("click", (event) => {
@@ -353,20 +447,45 @@ function initializeSimulator() {
     }
 
     if (event.target.closest("[data-clear-simulation]")) {
-      for (const input of root.querySelectorAll("[data-simulation-score]")) {
-        input.value = "";
+      const clearButton = root.querySelector("[data-clear-simulation]");
+      if (clearButton?.dataset.canUndo === "true") {
+        for (const { input, value } of clearButton.__snapshot ?? []) {
+          input.value = value;
+        }
+        delete clearButton.dataset.canUndo;
+        if (clearButton) {
+          clearButton.textContent = "Limpar";
+          clearButton.removeAttribute("aria-label");
+          clearButton.__snapshot = [];
+        }
+      } else {
+        const snapshot = [];
+        for (const input of root.querySelectorAll("[data-simulation-score]")) {
+          if (input.value.length) snapshot.push({ input, value: input.value });
+          input.value = "";
+        }
+        if (clearButton && snapshot.length) {
+          clearButton.__snapshot = snapshot;
+          clearButton.dataset.canUndo = "true";
+          clearButton.textContent = "Desfazer";
+          clearButton.setAttribute("aria-label", "Desfazer limpeza dos resultados");
+        }
       }
       updateStandings({ announce: true });
+      return;
     }
   });
 
   root.addEventListener("input", (event) => {
     if (!event.target.matches("[data-simulation-score]")) return;
-    if (event.target.value.length) {
-      const score = Math.trunc(Number(event.target.value));
-      event.target.value = Number.isFinite(score)
-        ? String(Math.min(99, Math.max(0, score)))
-        : "";
+    const clearButton = root.querySelector("[data-clear-simulation]");
+    if (clearButton?.dataset.canUndo === "true") {
+      // Typing after a clear invalidates the snapshot; the next clear starts
+      // from the current inputs instead of silently discarding them.
+      delete clearButton.dataset.canUndo;
+      clearButton.__snapshot = [];
+      clearButton.textContent = "Limpar";
+      clearButton.removeAttribute("aria-label");
     }
     updateStandings({ announce: true });
   });
