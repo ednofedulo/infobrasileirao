@@ -15,23 +15,26 @@ export function calculateSimulatedStandings(
       }
     ])
   );
+  const appliedMatches = [];
 
   for (const match of matches) {
     const home = table.get(String(match.homeTeam.id));
     const away = table.get(String(match.awayTeam.id));
-    const homeScore = Number(match.homeTeam.score);
-    const awayScore = Number(match.awayTeam.score);
-
     if (
       !home ||
       !away ||
-      !Number.isInteger(homeScore) ||
-      !Number.isInteger(awayScore) ||
-      homeScore < 0 ||
-      awayScore < 0
+      !isValidSimulationScore(match.homeTeam.score) ||
+      !isValidSimulationScore(match.awayTeam.score)
     ) {
       continue;
     }
+
+    const homeScore = Number(match.homeTeam.score);
+    const awayScore = Number(match.awayTeam.score);
+    appliedMatches.push({
+      homeTeam: { id: match.homeTeam.id, score: homeScore },
+      awayTeam: { id: match.awayTeam.id, score: awayScore }
+    });
 
     home.played += 1;
     away.played += 1;
@@ -61,10 +64,11 @@ export function calculateSimulatedStandings(
     goalDifference: entry.goalsFor - entry.goalsAgainst
   }));
 
-  return rankStandingsByCbfCriteria(standings, [...playedMatches, ...matches]);
+  return rankStandingsByCbfCriteria(standings, [...playedMatches, ...appliedMatches]);
 }
 
 export function isValidSimulationScore(value) {
+  if (typeof value !== "number" && typeof value !== "string") return false;
   const score = Number(value);
   return (
     String(value).trim().length > 0 &&
@@ -136,14 +140,6 @@ function readSimulatedMatches(root) {
 
     const homeScore = Number(homeInput.value);
     const awayScore = Number(awayInput.value);
-    if (
-      !Number.isInteger(homeScore) ||
-      !Number.isInteger(awayScore) ||
-      homeScore < 0 ||
-      awayScore < 0
-    ) {
-      return [];
-    }
 
     return [
       {
