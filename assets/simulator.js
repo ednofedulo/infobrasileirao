@@ -1,3 +1,4 @@
+import { STANDING_ZONE_CLASSES, standingZone } from "./competition-zones.js?v=835312e81447";
 import { rankStandingsByCbfCriteria } from "./standing-order.js?v=9e6886317c75";
 
 export function calculateSimulatedStandings(
@@ -148,13 +149,6 @@ function readSimulatedMatches(root) {
       }
     ];
   });
-}
-
-function standingZone(position) {
-  if (position <= 5) return "zone-libertadores";
-  if (position <= 11) return "zone-sulamericana";
-  if (position >= 17) return "zone-relegation";
-  return "zone-neutral";
 }
 
 function createPlayerBadge(team) {
@@ -356,12 +350,7 @@ function initializeSimulator() {
       const row = rowsByTeam.get(String(entry.team.id));
       if (!row) continue;
 
-      for (const zone of [
-        "zone-libertadores",
-        "zone-sulamericana",
-        "zone-relegation",
-        "zone-neutral"
-      ]) {
+      for (const zone of STANDING_ZONE_CLASSES) {
         row.classList.remove(zone);
       }
       row.classList.add(standingZone(entry.position));
