@@ -160,12 +160,11 @@
     }
   }
 
-  function toggleStandingChart(button) {
+  function setStandingChartExpanded(button, expanded) {
     const chartId = button.getAttribute("aria-controls");
     const chart = chartId ? document.getElementById(chartId) : null;
     if (!chart) return;
 
-    const expanded = button.getAttribute("aria-expanded") !== "true";
     const teamName = button.dataset.teamName ?? "o clube";
     button.setAttribute("aria-expanded", String(expanded));
     button.setAttribute(
@@ -177,6 +176,18 @@
     if (chart.fixedPanel) chart.fixedPanel.hidden = !expanded;
     if (expanded) setUpPositionCharts(chart.fixedPanel ?? chart);
     chart.refreshLayout?.();
+  }
+
+  function toggleStandingChart(button) {
+    const expanded = button.getAttribute("aria-expanded") !== "true";
+    if (expanded) {
+      for (const openButton of document.querySelectorAll(
+        '[data-standing-toggle][aria-expanded="true"]'
+      )) {
+        if (openButton !== button) setStandingChartExpanded(openButton, false);
+      }
+    }
+    setStandingChartExpanded(button, expanded);
   }
 
   const chartResultLabels = {
@@ -405,10 +416,13 @@
         const positionCopy = position.cloneNode(true);
         const teamCopy = document.createElement("div");
         teamCopy.className = simulator ? "team-cell simulator-club" : "team-cell";
+        const teamLink = team.querySelector(".standing-team-link");
         const button = team.querySelector("button");
-        if (button) {
-          const accessibleName = button.dataset.teamName;
-          teamCopy.append(button);
+        if (teamLink || button) {
+          const accessibleName =
+            button?.dataset.teamName ?? teamLink?.getAttribute("aria-label") ?? "Clube";
+          if (teamLink) teamCopy.append(teamLink);
+          if (button) teamCopy.append(button);
           team.textContent = accessibleName;
         } else {
           teamCopy.innerHTML = team.innerHTML;
