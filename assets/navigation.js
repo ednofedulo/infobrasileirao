@@ -160,218 +160,6 @@
     }
   }
 
-  function setStandingChartExpanded(button, expanded) {
-    const chartId = button.getAttribute("aria-controls");
-    const chart = chartId ? document.getElementById(chartId) : null;
-    if (!chart) return;
-
-    const teamName = button.dataset.teamName ?? "o clube";
-    button.setAttribute("aria-expanded", String(expanded));
-    button.setAttribute(
-      "aria-label",
-      `${expanded ? "Recolher" : "Exibir"} evolução do ${teamName} na classificação`
-    );
-    chart.hidden = !expanded;
-    if (chart.sourceRow) chart.sourceRow.hidden = !expanded;
-    if (chart.fixedPanel) chart.fixedPanel.hidden = !expanded;
-    if (expanded) setUpPositionCharts(chart.fixedPanel ?? chart);
-    chart.refreshLayout?.();
-  }
-
-  function toggleStandingChart(button) {
-    const expanded = button.getAttribute("aria-expanded") !== "true";
-    if (expanded) {
-      for (const openButton of document.querySelectorAll(
-        '[data-standing-toggle][aria-expanded="true"]'
-      )) {
-        if (openButton !== button) setStandingChartExpanded(openButton, false);
-      }
-    }
-    setStandingChartExpanded(button, expanded);
-  }
-
-  const chartResultLabels = {
-    win: "Vitória",
-    draw: "Empate",
-    loss: "Derrota"
-  };
-  const chartVenueLabels = { C: "Em casa", F: "Fora de casa" };
-
-  // Progressive enhancement: without JS every point still carries a native
-  // <title>, so the values stay reachable through hover and keyboard focus.
-  function setUpPositionChart(chart) {
-    if (chart.dataset.chartReady === "true") return;
-    chart.dataset.chartReady = "true";
-
-    // Retain the original geometry so resizing never compounds rounding errors.
-    // Adapt the plotting area to the container while keeping labels readable.
-    if (typeof ResizeObserver !== "undefined") {
-      const geometry = [
-        ...chart.querySelectorAll("[x], [cx], [x1], [x2], polyline")
-      ].map((element) => ({
-        element,
-        attributes: ["x", "cx", "x1", "x2", "width", "points"]
-          .filter((name) => element.hasAttribute(name))
-          .map((name) => [name, element.getAttribute(name)])
-      }));
-      new ResizeObserver(() => {
-        const width = Math.max(240, Math.min(960, chart.clientWidth));
-        const left = 34;
-        const right = width - 52;
-        const scale = (right - left) / (960 - 46 - 76);
-        const x = (value) => left + (Number(value) - 46) * scale;
-        chart.setAttribute("viewBox", `0 0 ${width} 328`);
-        chart.classList.toggle("chart-compact", width < 540);
-        for (const { element, attributes } of geometry) {
-          for (const [name, value] of attributes) {
-            const mapped =
-              name === "points"
-                ? value
-                    .trim()
-                    .split(/\s+/)
-                    .map((point) => {
-                      const [px, py] = point.split(",");
-                      return `${x(px)},${py}`;
-                    })
-                    .join(" ")
-                : name === "width"
-                  ? Number(value) * scale
-                  : x(value);
-            element.setAttribute(name, String(mapped));
-          }
-        }
-      }).observe(chart);
-    }
-
-    const panel = chart.closest(".team-chart-panel");
-    const surface = chart.querySelector("[data-chart-surface]");
-    const crosshair = chart.querySelector("[data-chart-crosshair]");
-    const points = [...chart.querySelectorAll(".chart-point")];
-    if (!panel || !surface || !points.length) return;
-
-    const tooltip = document.createElement("div");
-    tooltip.className = "chart-tooltip";
-    tooltip.setAttribute("aria-hidden", "true");
-    tooltip.innerHTML =
-      '<span class="chart-tooltip-round"></span>' +
-      '<span class="chart-tooltip-result"><span class="chart-tooltip-swatch"></span><span></span></span>' +
-      '<span class="chart-tooltip-match"></span>' +
-      '<span class="chart-tooltip-standing"></span>';
-    panel.append(tooltip);
-
-    const roundLabel = tooltip.querySelector(".chart-tooltip-round");
-    const swatch = tooltip.querySelector(".chart-tooltip-swatch");
-    const resultLabel = tooltip.querySelector(".chart-tooltip-result span:last-child");
-    const matchLabel = tooltip.querySelector(".chart-tooltip-match");
-    const standingLabel = tooltip.querySelector(".chart-tooltip-standing");
-    let activePoint = null;
-
-    function hide() {
-      if (!activePoint) return;
-      activePoint = null;
-      tooltip.dataset.visible = "false";
-      crosshair.setAttribute("hidden", "");
-      for (const point of points) point.removeAttribute("data-active");
-    }
-
-    function show(point) {
-      if (point === activePoint) return;
-      activePoint = point;
-
-      const [round, date, result, position, pointTotal, venue, match] = (
-        point.dataset.point ?? ""
-      ).split("|");
-      // The axis counts matches, so the round is what the reader needs spelled out.
-      roundLabel.textContent = `Jogo ${points.indexOf(point) + 1} · Rodada ${round} · ${date}`;
-      swatch.className = `chart-tooltip-swatch result-${result}`;
-      resultLabel.textContent = chartResultLabels[result] ?? "";
-      matchLabel.textContent = match ? `${chartVenueLabels[venue]} · ${match}` : "";
-      matchLabel.hidden = !match;
-      standingLabel.textContent = `${position}º · ${pointTotal} ${
-        pointTotal === "1" ? "ponto" : "pontos"
-      }`;
-
-      for (const other of points) other.removeAttribute("data-active");
-      point.setAttribute("data-active", "true");
-
-      const cx = Number(point.getAttribute("cx"));
-      crosshair.setAttribute("x1", String(cx));
-      crosshair.setAttribute("x2", String(cx));
-      crosshair.removeAttribute("hidden");
-
-      // The SVG scales to its container, so map viewBox units to CSS pixels.
-      const chartBox = chart.getBoundingClientRect();
-      const panelBox = panel.getBoundingClientRect();
-      const scale = chartBox.width / chart.viewBox.baseVal.width;
-      const left = chartBox.left - panelBox.left + cx * scale;
-      const top =
-        chartBox.top - panelBox.top + Number(point.getAttribute("cy")) * scale;
-
-      tooltip.dataset.visible = "true";
-      const offset = tooltip.offsetWidth / 2;
-      const clamped = Math.min(Math.max(left, offset + 4), panelBox.width - offset - 4);
-      tooltip.style.transform = `translate(${Math.round(clamped - offset)}px, ${Math.round(
-        top - tooltip.offsetHeight - 14
-      )}px)`;
-    }
-
-    function nearestPoint(event) {
-      const chartBox = chart.getBoundingClientRect();
-      const scale = chartBox.width / chart.viewBox.baseVal.width;
-      const position = (event.clientX - chartBox.left) / scale;
-      let closest = points[0];
-      let distance = Infinity;
-      for (const point of points) {
-        const delta = Math.abs(Number(point.getAttribute("cx")) - position);
-        if (delta < distance) {
-          distance = delta;
-          closest = point;
-        }
-      }
-      return closest;
-    }
-
-    surface.addEventListener("pointermove", (event) => show(nearestPoint(event)));
-    surface.addEventListener("pointerdown", (event) => show(nearestPoint(event)));
-    surface.addEventListener("pointerleave", hide);
-    surface.addEventListener("pointercancel", hide);
-    for (const [index, point] of points.entries()) {
-      point.setAttribute("tabindex", index === 0 ? "0" : "-1");
-      point.addEventListener("focus", () => show(point));
-      point.addEventListener("blur", hide);
-    }
-    chart.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        hide();
-        event.stopPropagation();
-      }
-      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-      event.preventDefault();
-      const current = Math.max(0, points.indexOf(document.activeElement));
-      const next =
-        event.key === "Home"
-          ? 0
-          : event.key === "End"
-            ? points.length - 1
-            : Math.max(
-                0,
-                Math.min(
-                  points.length - 1,
-                  current + (event.key === "ArrowRight" ? 1 : -1)
-                )
-              );
-      for (const point of points) point.setAttribute("tabindex", "-1");
-      points[next].setAttribute("tabindex", "0");
-      points[next].focus();
-    });
-  }
-
-  function setUpPositionCharts(root) {
-    for (const chart of root.querySelectorAll("[data-position-chart]")) {
-      setUpPositionChart(chart);
-    }
-  }
-
   function setUpStandingsScroll() {
     // The shadow on the sticky identity edge only communicates real overlap.
     // scrollLeft is clamped because Safari can report values beyond the limits
@@ -394,13 +182,13 @@
         scroller.classList.add("standings-scroll");
       }
       if (!table) continue;
-      // The visible identity and expanded charts are siblings of the native
-      // scroller, not sticky descendants. Native elastic scrolling can only
+      // The visible identity is a sibling of the native
+      // scroller, not a sticky descendant. Native elastic scrolling can only
       // move the statistics. The original table retains its row headers.
       const rail = document.createElement("div");
       rail.className = "standings-identity";
       rail.setAttribute("role", "group");
-      rail.setAttribute("aria-label", "Clubes e evolução na classificação");
+      rail.setAttribute("aria-label", "Clubes");
       const rows = [
         ...table.querySelectorAll(
           simulator
@@ -417,12 +205,9 @@
         const teamCopy = document.createElement("div");
         teamCopy.className = simulator ? "team-cell simulator-club" : "team-cell";
         const teamLink = team.querySelector(".standing-team-link");
-        const button = team.querySelector("button");
-        if (teamLink || button) {
-          const accessibleName =
-            button?.dataset.teamName ?? teamLink?.getAttribute("aria-label") ?? "Clube";
-          if (teamLink) teamCopy.append(teamLink);
-          if (button) teamCopy.append(button);
+        if (teamLink) {
+          const accessibleName = teamLink.getAttribute("aria-label") ?? "Clube";
+          teamCopy.append(teamLink);
           team.textContent = accessibleName;
         } else {
           teamCopy.innerHTML = team.innerHTML;
@@ -440,26 +225,6 @@
         return { row, identity, position, team, positionVisual, teamCopy };
       });
       wrap.append(rail);
-      const expansions = [...table.querySelectorAll(".standing-chart-row")].map(
-        (row) => {
-          const panel = document.createElement("div");
-          panel.className = "standing-chart-overlay";
-          panel.hidden = row.hidden;
-          panel.id = `${row.id}-panel`;
-          panel.setAttribute("role", "region");
-          const control = rail.querySelector(`[aria-controls="${row.id}"]`);
-          control?.setAttribute("aria-controls", panel.id);
-          panel.setAttribute(
-            "aria-label",
-            `Evolução do ${control?.dataset.teamName ?? "clube"}`
-          );
-          panel.append(row.querySelector(".standing-chart-shell"));
-          wrap.append(panel);
-          row.fixedPanel = panel;
-          panel.sourceRow = row;
-          return { row, panel };
-        }
-      );
       const dividers = document.createElement("div");
       dividers.className = "standings-dividers";
       dividers.setAttribute("aria-hidden", "true");
@@ -479,11 +244,6 @@
           "--sb-pos",
           `${first.position.getBoundingClientRect().width}px`
         );
-        for (const { row, panel } of expansions) {
-          row.children[0].style.height = row.hidden
-            ? "0px"
-            : `${panel.getBoundingClientRect().height}px`;
-        }
         const top = wrap.getBoundingClientRect().top + wrap.clientTop;
         const segments = [];
         for (const {
@@ -506,10 +266,6 @@
           const last = segments.at(-1);
           if (last && Math.abs(last.bottom - y) < 2) last.bottom = y + box.height;
           else segments.push({ top: y, bottom: y + box.height });
-        }
-        for (const { row, panel } of expansions) {
-          if (!row.hidden)
-            panel.style.top = `${row.getBoundingClientRect().top - top}px`;
         }
         if (simulator) {
           // Source rows reorder after a simulation; merge by rendered order.
@@ -536,10 +292,6 @@
           requestAnimationFrame(layout);
         }
       };
-      for (const { row, panel } of expansions) {
-        row.refreshLayout = schedule;
-        panel.refreshLayout = schedule;
-      }
       const sync = () => {
         const maximum = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
         const left = Math.min(Math.max(scroller.scrollLeft, 0), maximum);
@@ -554,7 +306,6 @@
         observer.observe(wrap);
         observer.observe(scroller);
         observer.observe(table);
-        for (const { panel } of expansions) observer.observe(panel);
       }
       document.fonts?.ready.then(schedule);
       wrap
@@ -580,8 +331,6 @@
       }
       if (event.target?.closest?.("[data-menu-toggle]")) toggleMenu();
       if (event.target?.closest?.("[data-menu-scrim]")) toggleMenu();
-      const standingToggle = event.target?.closest?.("[data-standing-toggle]");
-      if (standingToggle) toggleStandingChart(standingToggle);
     });
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
