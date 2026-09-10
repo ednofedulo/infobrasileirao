@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /serie-b/
+Disallow: /serie-b/data/
+
+Sitemap: https://infobrasileirao.com.br/serie-b/sitemap.xml
