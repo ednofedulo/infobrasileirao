@@ -1,5 +1,44 @@
+# Search engines may crawl public pages and rendering assets.
 User-agent: *
 Allow: /serie-b/
 Disallow: /serie-b/data/
+
+# Opt out of AI training, bulk datasets and commercial SEO collection.
+# robots.txt relies on crawler cooperation; enforce blocks at the CDN.
+User-agent: Amazonbot
+Disallow: /serie-b/
+
+User-agent: Applebot-Extended
+Disallow: /serie-b/
+
+User-agent: Bytespider
+Disallow: /serie-b/
+
+User-agent: CCBot
+Disallow: /serie-b/
+
+User-agent: ClaudeBot
+Disallow: /serie-b/
+
+User-agent: Google-Extended
+Disallow: /serie-b/
+
+User-agent: GPTBot
+Disallow: /serie-b/
+
+User-agent: meta-externalagent
+Disallow: /serie-b/
+
+User-agent: AhrefsBot
+Disallow: /serie-b/
+
+User-agent: SemrushBot
+Disallow: /serie-b/
+
+User-agent: MJ12bot
+Disallow: /serie-b/
+
+User-agent: DotBot
+Disallow: /serie-b/
 
 Sitemap: https://infobrasileirao.com.br/serie-b/sitemap.xml
